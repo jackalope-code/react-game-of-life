@@ -1,5 +1,4 @@
-import React, {useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React, {useState, useCallback } from 'react';
 import './App.css';
 import {FixedSizeGrid} from 'react-window';
 import styled from 'styled-components';
@@ -125,31 +124,29 @@ function App() {
   const [cellSliderValue, setCellSliderValue] = useState(40);
   const [multiSelectMode, setMultiSelectMode] = useState(false);
   const [frameRateSliderValue, setFrameRateSliderValue] = useState(4);
-  const [runningFlag, setRunningFlag] = useState(false);
 
   const step = () => {
     setGridState(prevState => advanceState(prevState, GRID_SIZE, GRID_SIZE));
   }
 
-  const start = () => {
+  const start = useCallback(() => {
     if(currentStartHandle) {
       clearInterval(currentStartHandle);
     }
     // Cap max FPS from input
     step();
     currentStartHandle = setInterval(step, Math.max(1000/frameRateSliderValue, 100));
-    setRunningFlag(true);
-  }
+  }, [frameRateSliderValue]);
 
   const stop = () => {
     clearInterval(currentStartHandle);
-    setRunningFlag(false);
   }
 
-  useEffect(() => {
-    stop();
-    start();
-  }, [frameRateSliderValue]);
+  // useEffect(() => {
+  //   stop();
+  //   start();
+  //   // TODO: why does start need to be here
+  // }, [frameRateSliderValue]);
 
   const handleOnClick = (e: React.MouseEvent<HTMLDivElement>, columnIndex: number, rowIndex: number) => {
     // setCellActive((prevState: boolean) => !prevState);
@@ -169,16 +166,16 @@ function App() {
       return [...prevState.slice(0, rowIndex), modifiedSlice, ...prevState.slice(rowIndex+1)]
   }
 
-  interface ForwardProps {
-    onMouseDown: React.MouseEventHandler<HTMLDivElement>,
-    ref: React.ForwardedRef<HTMLDivElement>
-  }
+  // interface ForwardProps {
+  //   onMouseDown: React.MouseEventHandler<HTMLDivElement>,
+  //   ref: React.ForwardedRef<HTMLDivElement>
+  // }
 
-  interface OuterElementProps {
-    columnIndex: number,
-    rowIndex: number,
-    onMouseDown: React.MouseEventHandler<HTMLDivElement>
-  }
+  // interface OuterElementProps {
+  //   columnIndex: number,
+  //   rowIndex: number,
+  //   onMouseDown: React.MouseEventHandler<HTMLDivElement>
+  // }
 
   // const outerElementType = forwardRef<HTMLDivElement, OuterElementProps>((props, ref) => (
   //   <div ref={ref} {...props} onMouseDown={(e) => {
@@ -201,7 +198,7 @@ function App() {
     setFrameRateSliderValue(parseFloat(e.currentTarget.value))
   }
 
-  const debouncedSlideEventHandler = debounce(slideEventHandler, 100);
+  // const debouncedSlideEventHandler = debounce(slideEventHandler, 100);
 
   return (
     <div className="App">
