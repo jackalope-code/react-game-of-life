@@ -106,7 +106,7 @@ function App() {
   const [cellSliderValue, setCellSliderValue] = useState(40);
   const [multiSelectMode, setMultiSelectMode] = useState(false);
   const [frameRateSliderValue, setFrameRateSliderValue] = useState(4);
-  const [gameRunning, setGameRunning] = useState(false);
+  // const [gameRunning, setGameRunning] = useState(false);
   
 
   const step = () => {
