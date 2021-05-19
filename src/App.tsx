@@ -15,8 +15,6 @@ interface CellRendererProps {
   rowIndex: number,
   style: React.CSSProperties,
   data: StateData
-  // isActive: boolean,
-  // handleClick: React.MouseEventHandler<HTMLDivElement>
 }
 
 interface StyledCellProps {
@@ -71,18 +69,6 @@ const advanceState = (prevState: boolean[][], width: number, height: number) => 
 }
 
 const CellRenderer = ({columnIndex, rowIndex, style, data}: CellRendererProps) => {
-  //  onMouseDown={handleClick} 
-  // console.log('CELL RENDERER DATA ', data);
-  // if(data.grid) {
-  //   const count = countNeighbors(data.grid, rowIndex, columnIndex);
-  //   if(count) {
-  //     console.log('NEIGHBORS OF CELL ' + columnIndex + "-" + rowIndex);
-  //     console.log(count)
-  //   }
-
-  // } else {
-  //   console.log('NO GRID FOUND', data)
-  // }
   let onMouseEnterHandler;
   let onMouseDownHandler;
   if(data.useMultiSelect) {
@@ -142,12 +128,6 @@ function App() {
     clearInterval(currentStartHandle);
   }
 
-  // useEffect(() => {
-  //   stop();
-  //   start();
-  //   // TODO: why does start need to be here
-  // }, [frameRateSliderValue]);
-
   const handleOnClick = (e: React.MouseEvent<HTMLDivElement>, columnIndex: number, rowIndex: number) => {
     // setCellActive((prevState: boolean) => !prevState);
     console.log('CLICK EVENT', columnIndex, rowIndex)
@@ -165,31 +145,6 @@ function App() {
       modifiedSlice[columnIndex] = newValue;
       return [...prevState.slice(0, rowIndex), modifiedSlice, ...prevState.slice(rowIndex+1)]
   }
-
-  // interface ForwardProps {
-  //   onMouseDown: React.MouseEventHandler<HTMLDivElement>,
-  //   ref: React.ForwardedRef<HTMLDivElement>
-  // }
-
-  // interface OuterElementProps {
-  //   columnIndex: number,
-  //   rowIndex: number,
-  //   onMouseDown: React.MouseEventHandler<HTMLDivElement>
-  // }
-
-  // const outerElementType = forwardRef<HTMLDivElement, OuterElementProps>((props, ref) => (
-  //   <div ref={ref} {...props} onMouseDown={(e) => {
-  //     console.log(props);
-  //     handleOnClick(e, props.columnIndex, props.rowIndex)
-  //   }}/>
-  // ));
-
-              // <CellRenderer
-            //   columnIndex={columnIndex}
-            //   rowIndex={rowIndex}
-            //   style={style} cellActive={gridState[rowIndex][columnIndex]}
-            //   handleClick={(e: React.MouseEvent<HTMLDivElement>) => onClick(e, columnIndex, rowIndex)}
-            // ></CellRenderer>
 
   // TODO: update to actually use current state to render properly
   const eventHandler = multiSelectMode ? debounce(handleMouseOver, 10) : handleOnClick;
