@@ -3,6 +3,8 @@ import './App.css';
 import {FixedSizeGrid} from 'react-window';
 import styled from 'styled-components';
 import {debounce} from 'lodash';
+import ToggledButton from './components/ToggledButton';
+import Button from './components/Button';
 
 interface StateData {
   grid: boolean[][],
@@ -89,20 +91,13 @@ function createNewDataGrid<DataType>(width: number, height: number, defaultValue
   });
   return grid;
 }
-let currentStartHandle: NodeJS.Timeout;
 
-const BigButton = styled.button`
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 2px;
-  margin: 10px;
-  background-color: #e9e9e9;
-  border: 2px solid black;
-  // display: inline-block;
-  font-size: 24px;
-`;
+const startStopButtonTheme = {
+  toggledColor: '#ff0000',
+  defaultColor: '#00ff00'
+}
+
+let currentStartHandle: NodeJS.Timeout;
 
 function App() {
   const GRID_SIZE = 100;
@@ -110,6 +105,8 @@ function App() {
   const [cellSliderValue, setCellSliderValue] = useState(40);
   const [multiSelectMode, setMultiSelectMode] = useState(false);
   const [frameRateSliderValue, setFrameRateSliderValue] = useState(4);
+  const [gameRunning, setGameRunning] = useState(false);
+  
 
   const step = () => {
     setGridState(prevState => advanceState(prevState, GRID_SIZE, GRID_SIZE));
@@ -155,6 +152,16 @@ function App() {
 
   // const debouncedSlideEventHandler = debounce(slideEventHandler, 100);
 
+  const handleToggle = (e: React.MouseEvent<HTMLButtonElement>, toggledOn: boolean) => {
+    // setGameRunning(toggledOn);
+    console.log(toggledOn);
+    if(toggledOn) {
+      start();
+    } else {
+      stop()
+    }
+  }
+
   return (
     <div className="App">
       <FixedSizeGrid columnWidth={cellSliderValue} rowHeight={cellSliderValue}
@@ -165,9 +172,8 @@ function App() {
         {CellRenderer}
       </FixedSizeGrid>
       <div>
-        <BigButton onClick={start}>Start</BigButton>
-        <BigButton onClick={stop}>Stop</BigButton>
-        <BigButton onClick={step}>Step</BigButton>
+        <ToggledButton toggledText={{first: 'Start', second: 'Stop'}} onClickCallback={handleToggle} theme={startStopButtonTheme}></ToggledButton>
+        <Button onClick={step}>Step</Button>
         <label htmlFor="fps-slider">{frameRateSliderValue} FPS</label>
         <input type="range" min="0.5" max="10" value={frameRateSliderValue} onChange={slideEventHandler} id="fps-slider" />
         <label htmlFor="cell-slider">{cellSliderValue}px</label>
