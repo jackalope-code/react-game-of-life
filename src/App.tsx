@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import {debounce} from 'lodash';
 import ToggledButton from './components/ToggledButton';
 import Button from './components/Button';
+import {isMobile} from 'react-device-detect'
 
 interface StateData {
   grid: boolean[][],
@@ -166,12 +167,12 @@ function App() {
     <div className="App">
       <FixedSizeGrid columnWidth={cellSliderValue} rowHeight={cellSliderValue}
         columnCount={GRID_SIZE} rowCount={GRID_SIZE}
-        itemData={{grid: gridState, useMultiSelect: multiSelectMode, clickHandler: eventHandler}} width={1000} height={800}
+        itemData={{grid: gridState, useMultiSelect: multiSelectMode, clickHandler: eventHandler}} width={isMobile ? window.innerWidth : 1000} height={isMobile ? window.innerHeight : 800}
         // outerElementType={outerElementType}
       >
         {CellRenderer}
       </FixedSizeGrid>
-      <div>
+      <div className="view-controls">
         <ToggledButton toggledText={{first: 'Start', second: 'Stop'}} onClickCallback={handleToggle} theme={startStopButtonTheme}></ToggledButton>
         <Button onClick={step}>Step</Button>
         <label htmlFor="fps-slider">{frameRateSliderValue} FPS</label>

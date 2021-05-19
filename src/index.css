@@ -19,3 +19,7 @@ code {
 .App {
   touch-action: manipulation;
 }
+
+.view-controls {
+  text-align: left;
+}
