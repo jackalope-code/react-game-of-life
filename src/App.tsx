@@ -1,11 +1,11 @@
 import React, {useState, useCallback } from 'react';
 import './App.css';
 import {FixedSizeGrid} from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer';
 import styled from 'styled-components';
 import {debounce} from 'lodash';
 import ToggledButton from './components/ToggledButton';
 import Button from './components/Button';
-import {isMobile} from 'react-device-detect'
 
 interface StateData {
   grid: boolean[][],
@@ -165,16 +165,23 @@ function App() {
 
   return (
     <div className="App">
-      <FixedSizeGrid columnWidth={cellSliderValue} rowHeight={cellSliderValue}
-        columnCount={GRID_SIZE} rowCount={GRID_SIZE}
-        itemData={{grid: gridState, useMultiSelect: multiSelectMode, clickHandler: eventHandler}} width={isMobile ? window.innerWidth : 1000} height={isMobile ? window.innerHeight : 800}
-        // outerElementType={outerElementType}
-      >
-        {CellRenderer}
-      </FixedSizeGrid>
+      <div className="grid-container">
+        <AutoSizer>
+          {({width, height}) => (
+            <FixedSizeGrid columnWidth={cellSliderValue} rowHeight={cellSliderValue}
+              columnCount={GRID_SIZE} rowCount={GRID_SIZE}
+              itemData={{grid: gridState, useMultiSelect: multiSelectMode, clickHandler: eventHandler}} width={width} height={height}
+              // outerElementType={outerElementType}
+            >
+              {CellRenderer}
+            </FixedSizeGrid>
+          )}
+        </AutoSizer>
+      </div>
       <div className="view-controls">
         <ToggledButton toggledText={{first: 'Start', second: 'Stop'}} onClickCallback={handleToggle} theme={startStopButtonTheme}></ToggledButton>
         <Button onClick={step}>Step</Button>
+        <Button onClick={() => alert('EVENT STUB! Write save function + event handling;')}>Save</Button>
         <label htmlFor="fps-slider">{frameRateSliderValue} FPS</label>
         <input type="range" min="0.5" max="10" value={frameRateSliderValue} onChange={slideEventHandler} id="fps-slider" />
         <label htmlFor="cell-slider">{cellSliderValue}px</label>

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import { isPropertySignature } from 'typescript';
 
 interface ToggledButtonTheme {
     toggledColor: string,
